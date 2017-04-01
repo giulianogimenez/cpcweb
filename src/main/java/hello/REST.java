@@ -95,17 +95,17 @@ public class REST{
 	        	
 	        	estab.setNome(json.getString("nome"));
 	        	estab.setBandeira(convertToBandeira(json.getString("bandeira")));
-	        	estab.setLat(Float.parseFloat(json.getString("lat")));
-	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
-	        	estab.setConveniencia(convertToBoolean(json.getString("conveniencia")));
-	        	estab.setAlimentacao(convertToBoolean(json.getString("alimentacao")));
-	        	estab.setTrocaOleo(convertToBoolean(json.getString("trocaOleo")));  //
-	        	estab.setLavaRapido(convertToBoolean(json.getString("lavaRapido")));
-	        	estab.setMecanico(convertToBoolean(json.getString("mecanico")));
-	        	estab.setBorracheiro(convertToBoolean(json.getString("borracheiro")));
-	        	estab.setCaixaEletronico(convertToBoolean(json.getString("caixaEletronico")));
-	        	estab.setSemParar(convertToBoolean(json.getString("semParar")));
-	        	estab.setViaFacil(convertToBoolean(json.getString("viaFacil")));
+//	        	estab.setLat(Float.parseFloat(json.getString("lat")));
+//	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
+//	        	estab.setConveniencia(convertToBoolean(json.getString("conveniencia")));
+//	        	estab.setAlimentacao(convertToBoolean(json.getString("alimentacao")));
+//	        	estab.setTrocaOleo(convertToBoolean(json.getString("trocaOleo")));  //
+//	        	estab.setLavaRapido(convertToBoolean(json.getString("lavaRapido")));
+//	        	estab.setMecanico(convertToBoolean(json.getString("mecanico")));
+//	        	estab.setBorracheiro(convertToBoolean(json.getString("borracheiro")));
+//	        	estab.setCaixaEletronico(convertToBoolean(json.getString("caixaEletronico")));
+//	        	estab.setSemParar(convertToBoolean(json.getString("semParar")));
+//	        	estab.setViaFacil(convertToBoolean(json.getString("viaFacil")));
 	        	        	
 	            try {
 	            	

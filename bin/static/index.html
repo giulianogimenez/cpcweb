@@ -11,38 +11,44 @@
 	
 	
 	<script>
-		function boolToInt(bool){
-			if(bool)
-				return 1;
-			else
-				return 0;
-		}
-	
 		$(document).ready(function(){
 			$('form').submit(function(e){    
 				
 				e.preventDefault();
 				
-				var nome = $('#nome').val().trim();
+				var username = $('#username').val().trim();
+				var password = $('#password').val().trim();
 				
-				var bandeira = $('#bandeira').val().trim();
-				
-				
-				$.post("/estabelecimento", JSON.stringify({'nome': nome, 'bandeira': bandeira}), function(data){
-						
-					if(data[0].status == 0){
+				$.getJSON("/login/"+username+"/"+password+"?format=json&jsoncallback=",function(data) {
+					
+					if(data[0].ra == 0){
 
-						window.location.href = '/loginpsychologist.html';
+						window.location.href = '/index.html';
 						
+					} else if(data[0].completed==true){
+					
+							parseInt(sessionStorage.setItem("ra",data[0].ra));
+							
+							window.location.href = '/thankyou.html';
+
+					} else if(data[0].question==1){
+					
+						parseInt(sessionStorage.setItem("ra",data[0].ra));
+					
+						window.location.href = '/welcome.html';
+					
 					} else {
 					
-						sessionStorage.setItem("userName",data[0].userName);
+						parseInt(sessionStorage.setItem("ra",data[0].ra));
 
-						window.location.href = '/searchstudent.html';
-					}	
-						
-				}, "json");
-				
+					
+						window.location.href = '/question.html';
+					
+					}
+					
+					
+					
+				});
 			});
 		});
 	</script>
@@ -65,9 +71,9 @@
 				<label for="inputEmail3" class="col-md-4 control-label">Bandeira</label>
 				<div class="col-md-4">
 					<select required="required" type="Text" class="form-control" id="bandeira">
-					    <option value="SHELL">Shell</option>
-						<option value="IPIRANGA">Ipiranga</option>
-						<option value="BR">BR</option>
+					    <option value="shell">Shell</option>
+						<option value="ipiranga">Ipiranga</option>
+						<option value="br">BR</option>
 					</select>
 				</div>
 			</div>
