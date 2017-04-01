@@ -129,4 +129,6 @@ public class Estabelecimento implements Serializable {
 	public void setViaFacil(boolean viaFacil) {
 		this.viaFacil = viaFacil;
 	}
+	
+	
 }
