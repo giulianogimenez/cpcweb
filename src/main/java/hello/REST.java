@@ -83,7 +83,7 @@ public class REST{
 	
 	public void addEstabelecimento(){
 		
-		post("/estabelecimento", new Route() {
+		post("/estabelecimento/novo", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
 	        	

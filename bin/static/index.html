@@ -11,44 +11,38 @@
 	
 	
 	<script>
+		function boolToInt(bool){
+			if(bool)
+				return 1;
+			else
+				return 0;
+		}
+	
 		$(document).ready(function(){
 			$('form').submit(function(e){    
 				
 				e.preventDefault();
 				
-				var username = $('#username').val().trim();
-				var password = $('#password').val().trim();
+				var nome = $('#nome').val().trim();
 				
-				$.getJSON("/login/"+username+"/"+password+"?format=json&jsoncallback=",function(data) {
-					
-					if(data[0].ra == 0){
-
-						window.location.href = '/index.html';
+				var bandeira = $('#bandeira').val().trim();
+				
+				alert(nome + '\n' + bandeira);
+				
+				
+				$.post("/estabelecimento/novo", JSON.stringify({'nome': nome, 'bandeira': bandeira}), function(data){
 						
-					} else if(data[0].completed==true){
-					
-							parseInt(sessionStorage.setItem("ra",data[0].ra));
-							
-							window.location.href = '/thankyou.html';
+					if(data[0].status == 0){
 
-					} else if(data[0].question==1){
-					
-						parseInt(sessionStorage.setItem("ra",data[0].ra));
-					
-						window.location.href = '/welcome.html';
-					
+						window.location.href = '/loginpsychologist.html';
+						
 					} else {
-					
-						parseInt(sessionStorage.setItem("ra",data[0].ra));
 
-					
-						window.location.href = '/question.html';
-					
-					}
-					
-					
-					
-				});
+						window.location.href = '/searchstudent.html';
+					}	
+						
+				}, "json");
+				
 			});
 		});
 	</script>
@@ -71,9 +65,9 @@
 				<label for="inputEmail3" class="col-md-4 control-label">Bandeira</label>
 				<div class="col-md-4">
 					<select required="required" type="Text" class="form-control" id="bandeira">
-					    <option value="shell">Shell</option>
-						<option value="ipiranga">Ipiranga</option>
-						<option value="br">BR</option>
+					    <option value="SHELL">Shell</option>
+						<option value="IPIRANGA">Ipiranga</option>
+						<option value="BR">BR</option>
 					</select>
 				</div>
 			</div>
@@ -145,9 +139,9 @@
 					</table>
 			</div>
 		<!--Submit -->
-		<div class="form-group" align="center">
-			<button id="login" type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Adicionar Estabelecimento</button>
-		</div>
+			<div class="form-group" align="center">
+				<button id="login" type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Adicionar Estabelecimento</button>
+			</div>
 		</form>
   </body>
 </html>
