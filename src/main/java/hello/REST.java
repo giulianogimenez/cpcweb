@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
+import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
 import spark.Request;
 import spark.Response;
@@ -48,6 +49,71 @@ public class REST{
 	            		JSONArray jsonResult = new JSONArray();
 		         	    
 		             	jsonResult.put(new Gson().toJson(estabelecimentosList));
+		             	
+		             	return jsonResult;
+	            		
+	            	} 
+	             	
+        		} catch (JSONException e) {	
+        			e.printStackTrace();
+        		}
+	            return new JSONArray();
+	         }
+		});
+	}
+	
+	private Bandeira convertToBandeira(String bandeira){
+		bandeira = bandeira.toUpperCase();
+		if(bandeira.equals("BR"))
+			return Bandeira.BR;
+		if(bandeira.equals("SHELL"))
+			return Bandeira.SHELL;
+		if(bandeira.equals("IPIRANGA"))
+			return Bandeira.IPIRANGA;
+		return null;
+	}
+	
+	private boolean convertToBoolean(String bool){
+		int i = Integer.parseInt(bool);
+		if(i == 1)
+			return true;
+		else
+			return false;
+	}
+	
+	public void addEstabelecimento(){
+		
+		post("/estabelecimento", new Route() {
+			@Override
+            public Object handle(final Request request, final Response response){
+	        	
+	        	response.header("Access-Control-Allow-Origin", "*");
+	        	
+	        	JSONObject json = new JSONObject(request.body());
+	        	
+	        	Estabelecimento estab = new Estabelecimento();
+	        	
+	        	estab.setNome(json.getString("nome"));
+	        	estab.setBandeira(convertToBandeira(json.getString("bandeira")));
+	        	estab.setLat(Float.parseFloat(json.getString("lat")));
+	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
+	        	estab.setConveniencia(convertToBoolean(json.getString("conveniencia")));
+	        	estab.setAlimentacao(convertToBoolean(json.getString("alimentacao")));
+	        	estab.setTrocaOleo(convertToBoolean(json.getString("trocaOleo")));  //
+	        	estab.setLavaRapido(convertToBoolean(json.getString("lavaRapido")));
+	        	estab.setMecanico(convertToBoolean(json.getString("mecanico")));
+	        	estab.setBorracheiro(convertToBoolean(json.getString("borracheiro")));
+	        	estab.setCaixaEletronico(convertToBoolean(json.getString("caixaEletronico")));
+	        	estab.setSemParar(convertToBoolean(json.getString("semParar")));
+	        	estab.setViaFacil(convertToBoolean(json.getString("viaFacil")));
+	        	        	
+	            try {
+	            	
+	            		if(model.addEstabelecimento(estab)){
+	            		
+	            		JSONArray jsonResult = new JSONArray();
+		         	    
+		             	jsonResult.put(new Gson().toJson(null));
 		             	
 		             	return jsonResult;
 	            		
