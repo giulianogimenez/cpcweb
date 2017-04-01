@@ -62,28 +62,11 @@ public class REST{
 		});
 	}
 	
-	private Bandeira convertToBandeira(String bandeira){
-		bandeira = bandeira.toUpperCase();
-		if(bandeira.equals("BR"))
-			return Bandeira.BR;
-		if(bandeira.equals("SHELL"))
-			return Bandeira.SHELL;
-		if(bandeira.equals("IPIRANGA"))
-			return Bandeira.IPIRANGA;
-		return null;
-	}
-	
-	private boolean convertToBoolean(String bool){
-		int i = Integer.parseInt(bool);
-		if(i == 1)
-			return true;
-		else
-			return false;
-	}
+
 	
 	public void addEstabelecimento(){
 		
-		post("/estabelecimento/novo", new Route() {
+		post("/estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
 	        	
@@ -95,34 +78,41 @@ public class REST{
 	        	
 	        	estab.setNome(json.getString("nome"));
 	        	estab.setBandeira(convertToBandeira(json.getString("bandeira")));
+	        	estab.setEndereco(json.getString("endereco"));
 //	        	estab.setLat(Float.parseFloat(json.getString("lat")));
 //	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
-//	        	estab.setConveniencia(convertToBoolean(json.getString("conveniencia")));
-//	        	estab.setAlimentacao(convertToBoolean(json.getString("alimentacao")));
-//	        	estab.setTrocaOleo(convertToBoolean(json.getString("trocaOleo")));  //
-//	        	estab.setLavaRapido(convertToBoolean(json.getString("lavaRapido")));
-//	        	estab.setMecanico(convertToBoolean(json.getString("mecanico")));
-//	        	estab.setBorracheiro(convertToBoolean(json.getString("borracheiro")));
-//	        	estab.setCaixaEletronico(convertToBoolean(json.getString("caixaEletronico")));
-//	        	estab.setSemParar(convertToBoolean(json.getString("semParar")));
-//	        	estab.setViaFacil(convertToBoolean(json.getString("viaFacil")));
+	        	estab.setConveniencia(json.getBoolean("conveniencia"));
+	        	estab.setAlimentacao(json.getBoolean("alimentacao"));
+	        	estab.setTrocaOleo(json.getBoolean("trocaOleo"));  
+	        	estab.setLavaRapido(json.getBoolean("lavaRapido"));
+	        	estab.setMecanico(json.getBoolean("mecanico"));
+	        	estab.setBorracheiro(json.getBoolean("borracheiro"));
+	        	estab.setCaixaEletronico(json.getBoolean("caixaEletronico"));
+	        	estab.setSemParar(json.getBoolean("semParar"));
+	        	estab.setViaFacil(json.getBoolean("viaFacil"));
 	        	        	
 	            try {
 	            	
 	            		if(model.addEstabelecimento(estab)){
-	            		
-	            		JSONArray jsonResult = new JSONArray();
-		         	    
-		             	jsonResult.put(new Gson().toJson(null));
-		             	
-		             	return jsonResult;
-	            		
-	            	} 
-	             	
-        		} catch (JSONException e) {	
+	            			JSONArray jsonResult = new JSONArray();
+	            			JSONObject jsonObj = new JSONObject();
+	            			
+	            			jsonObj.put("status", 1);
+		         	        jsonResult.put(jsonObj);
+		         	        
+		         	        return jsonResult;
+	                   	} 
+        		}catch (JSONException e){
         			e.printStackTrace();
         		}
-	            return new JSONArray();
+	            
+    			JSONArray jsonResult = new JSONArray();
+    			JSONObject jsonObj = new JSONObject();
+    			
+    			jsonObj.put("status", 0);
+     	        jsonResult.put(jsonObj);
+     	        
+     	        return jsonResult;
 	         }
 		});
 	}
@@ -1371,4 +1361,15 @@ public class REST{
 //			});     
 //		}
 		
+	private Bandeira convertToBandeira(String bandeira){
+		bandeira = bandeira.toUpperCase();
+		if(bandeira.equals("BR"))
+			return Bandeira.BR;
+		if(bandeira.equals("SHELL"))
+			return Bandeira.SHELL;
+		if(bandeira.equals("IPIRANGA"))
+			return Bandeira.IPIRANGA;
+		return null;
+	}
+	
 }

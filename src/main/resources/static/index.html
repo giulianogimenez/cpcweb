@@ -24,14 +24,12 @@
 				e.preventDefault();
 				
 				var nome = $('#nome').val().trim();
-				
 				var bandeira = $('#bandeira').val().trim();
-				
-				alert(nome + '\n' + bandeira);
-				
-				
-				$.post("/estabelecimento/novo", JSON.stringify({'nome': nome, 'bandeira': bandeira}), function(data){
-						
+				var endereco = $('#endereco').val().trim();
+				var conveniencia = $('#conveniencia').is(':checked');
+
+				$.post("/estabelecimento", JSON.stringify({'nome': nome, 'bandeira': bandeira, 'endereco': endereco, 'conveniencia': conveniencia}), 
+				function(data){
 					if(data[0].status == 0){
 
 						window.location.href = '/loginpsychologist.html';
@@ -58,6 +56,13 @@
 				<label for="inputEmail3" class="col-md-4 control-label">Nome</label>
 				<div class="col-md-4">
 					<input required="required" type="Text" class="form-control" id="nome" placeholder="Nome do Estabelecimento">
+				</div>
+			</div>
+		<!-- Endereço -->
+			<div class="form-group">
+				<label for="inputEmail3" class="col-md-4 control-label">Endereço</label>
+				<div class="col-md-4">
+					<input required="required" type="Text" class="form-control" id="endereco" placeholder="Endereço">
 				</div>
 			</div>
 		<!-- Bandeira -->
@@ -92,7 +97,7 @@
 						<tr>
 					<!-- Conveniencia -->
 							<th>
-								<label><input type="checkbox" id="conveniencia"> Conveniência</label>
+								<label><input type="checkbox" id="conveniencia" > Conveniência</label>
 							</th>
 					<!-- Alimentação -->
 							<th>
