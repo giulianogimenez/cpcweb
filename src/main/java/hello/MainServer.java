@@ -8,6 +8,7 @@ import static spark.Spark.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
 
 
@@ -67,7 +68,22 @@ public class MainServer {
 	
     public static void initializeModel(){
 		
-//    	model.addEstabelecimento(new Estabelecimento());
+    	Estabelecimento estabelecimento = new Estabelecimento();
+    	estabelecimento.setEndereco("Rua do Hamilton");
+    	estabelecimento.setNome("Posto Hamilton Safadão");
+    	estabelecimento.setLat(1f);
+    	estabelecimento.setLongi(2f);
+    	estabelecimento.setLavaRapido(true);
+    	estabelecimento.setMecanico(false);
+    	estabelecimento.setSemParar(false);
+    	estabelecimento.setTrocaOleo(true);
+    	estabelecimento.setBandeira(Bandeira.SHELL);
+    	estabelecimento.setBorracheiro(true);
+    	estabelecimento.setCaixaEletronico(false);
+    	estabelecimento.setAlimentacao(true);
+    	estabelecimento.setConveniencia(true);
+    	
+    	model.addEstabelecimento(estabelecimento);
 //        Institution fatecsjc = new Institution("fatecsjc");
 //		Institution fatecmarilia = new Institution("fatecmarilia");
 //		model.addInstitution(fatecsjc);

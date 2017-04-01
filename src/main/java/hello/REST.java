@@ -47,10 +47,7 @@ public class REST{
 	            		
 	            		JSONArray jsonResult = new JSONArray();
 		         	    
-	            		Gson gson = new Gson();
-	            		gson.toJson(estabelecimentosList);
-	            		
-		             	jsonResult.put(gson.toString());
+		             	jsonResult.put(new Gson().toJson(estabelecimentosList));
 		             	
 		             	return jsonResult;
 	            		
@@ -59,12 +56,9 @@ public class REST{
         		} catch (JSONException e) {	
         			e.printStackTrace();
         		}
-	            return null;
+	            return new JSONArray();
 	         }
-	         
-	      });
-			
-
+		});
 	}
 //	
 //	public void loginPsychologist(){

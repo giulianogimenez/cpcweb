@@ -129,6 +129,31 @@ public class Estabelecimento implements Serializable {
 	public void setViaFacil(boolean viaFacil) {
 		this.viaFacil = viaFacil;
 	}
+
+	public Estabelecimento() {
+		
+	}
+	
+	public Estabelecimento(String nome, Bandeira bandeira, String endereco, float lat, float longi,
+			boolean conveniencia, boolean alimentacao, boolean trocaOleo, boolean lavaRapido, boolean mecanico,
+			boolean borracheiro, boolean caixaEletronico, boolean semParar, boolean viaFacil) {
+		super();
+		this.nome = nome;
+		this.bandeira = bandeira;
+		this.endereco = endereco;
+		this.lat = lat;
+		this.longi = longi;
+		this.conveniencia = conveniencia;
+		this.alimentacao = alimentacao;
+		this.trocaOleo = trocaOleo;
+		this.lavaRapido = lavaRapido;
+		this.mecanico = mecanico;
+		this.borracheiro = borracheiro;
+		this.caixaEletronico = caixaEletronico;
+		this.semParar = semParar;
+		this.viaFacil = viaFacil;
+	}
+	
 	
 	
 }
