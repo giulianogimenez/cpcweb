@@ -1,152 +1,55 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Login</title>
-    
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	
-
-	<link href="css/bootstrap.min.css" rel=stylesheet>
-	
 	
 	<script>
-		function boolToInt(bool){
-			if(bool)
-				return 1;
-			else
-				return 0;
-		}
-	
-		$(document).ready(function(){
-			$('form').submit(function(e){    
-				
-				e.preventDefault();
-				
-				var nome = $('#nome').val().trim();
-				var bandeira = $('#bandeira').val().trim();
-				var endereco = $('#endereco').val().trim();
-				var conveniencia = $('#conveniencia').is(':checked');
-
-				$.post("/estabelecimento", JSON.stringify({'nome': nome, 'bandeira': bandeira, 'endereco': endereco, 'conveniencia': conveniencia}), 
-				function(data){
-					if(data[0].status == 0){
-
-						window.location.href = '/loginpsychologist.html';
-						
-					} else {
-
-						window.location.href = '/searchstudent.html';
-					}	
-						
-				}, "json");
-				
+		// Create a map object and specify the DOM element for display.
+		var map;
+		
+		function initMap(){
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: -23.397, lng: -46.644},
+				scrollwheel: true,
+				zoom: 8
 			});
-		});
-	</script>
+			
+			map.addListener('rightclick',function(e){
+				clolocarMarker(e.latLng);
+			});
+		}
 
-   
-  </head>
-  <body>
-		<br>
-		<br>
-		<form class="form-horizontal" method="post" id="form">
-		<!-- Nome -->
-			<div class="form-group">
-				<label for="inputEmail3" class="col-md-4 control-label">Nome</label>
-				<div class="col-md-4">
-					<input required="required" type="Text" class="form-control" id="nome" placeholder="Nome do Estabelecimento">
-				</div>
-			</div>
-		<!-- Endereço -->
-			<div class="form-group">
-				<label for="inputEmail3" class="col-md-4 control-label">Endereço</label>
-				<div class="col-md-4">
-					<input required="required" type="Text" class="form-control" id="endereco" placeholder="Endereço">
-				</div>
-			</div>
-		<!-- Bandeira -->
-			<div class="form-group">
-				<label for="inputEmail3" class="col-md-4 control-label">Bandeira</label>
-				<div class="col-md-4">
-					<select required="required" type="Text" class="form-control" id="bandeira">
-					    <option value="SHELL">Shell</option>
-						<option value="IPIRANGA">Ipiranga</option>
-						<option value="BR">BR</option>
-					</select>
-				</div>
-			</div>
+		function marcarMapa(latLng) {
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map
+			});
+			marker.setDraggable(true);
+			marker.addListener('rightclick',function(){ marker.setMap(null); });
+		}
 		
-		<style>
-			.checkbox-inline{
-				font-size: 14px;
-				line-height: 1.42857143;
-				font-weight: bold;
-				align: left;
-			}
-			table, th, td {
-				padding-left: 20px;
-				padding-right: 20px;
-				padding-bottom: 10px;
-			}
+		function clolocarMarker(latLng) {
+			var marker = new google.maps.Marker({
+				position: latLng,
+				map: map
+			});
+			marker.setDraggable(true);
+			marker.addListener('rightclick',function(){ marker.setMap(null); });
+		}
+
+    </script>
+    <script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6u-wNUM-dNnVM83Utro7ekIYjv_ETH7E&callback=initMap">
+    </script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<head>
+		<meta charset="utf-8">
+		<title>Mapa</title>
+	<link href="css/bootstrap.min.css" rel=stylesheet>
+		<style type="text/css">
+			html, body { height: 100%; margin: 0; padding: 0; }
+			#map { height: 100%; }
 		</style>
-		
-			<div class="form-group">
-				<label for="inputEmail3" class="col-md-4 control-label">Funcionalidades</label>
-					<table>
-						<tr>
-					<!-- Conveniencia -->
-							<th>
-								<label><input type="checkbox" id="conveniencia" > Conveniência</label>
-							</th>
-					<!-- Alimentação -->
-							<th>
-								<label><input type="checkbox" id="alimentacao"> Alimentação</label>
-							</th>
-						</tr>
-						<tr>
-					<!-- Troca de Óleo -->
-							<th>
-								<label><input type="checkbox" id="trocaOleo"> Troca de Óleo</label>
-							</th>
-					<!-- Lava Rápido -->
-							<th>
-								<label><input type="checkbox" id="lavaRapido"> Lava Rápido</label>
-							</th>
-						</tr>
-						<tr>
-					<!-- Mecânico -->
-							<th>
-								<label><input type="checkbox" id="mecanico"> Mecânico</label>
-							</th>
-					<!-- Borracheiro -->
-							<th>
-								<label><input type="checkbox" id="borracheiro"> Borracheiro</label>
-							</th>
-						</tr>
-						<tr>
-					<!-- Caixa Eletrônico -->
-							<th>
-								<label><input type="checkbox" id="caixaEletronico"> Caixa Eletrônico</label>
-							</th>
-					<!-- Sem Parar -->
-							<th>
-								<label><input type="checkbox" id="semParar"> Sem Parar</label>
-							</th>
-						</tr>
-						<tr>
-					<!-- Via Fácil -->
-							<th>
-								<label><input type="checkbox" id="viaFacil"> Via Fácil</label>
-							</th>
-						</tr>
-					<!---->
-					</table>
-			</div>
-		<!--Submit -->
-			<div class="form-group" align="center">
-				<button id="login" type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Adicionar Estabelecimento</button>
-			</div>
-		</form>
-  </body>
+	</head>
+	<body onload="initMap();marcarMapa(-23.397,-46.644);">
+		<div id="map" onload='()'></div>
+	</body>
 </html>

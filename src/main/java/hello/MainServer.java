@@ -2,16 +2,11 @@ package hello;
 
 import static spark.Spark.*;
 
-
-
-
 import java.util.LinkedList;
 import java.util.List;
 
 import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
-
-
 
 public class MainServer {
 
@@ -42,7 +37,6 @@ public class MainServer {
     }
 	
     public static void initializeModel(){
-    		
 		
 	}
 	

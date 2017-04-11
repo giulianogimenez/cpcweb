@@ -1,7 +1,5 @@
 package hello;
 
-
-
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -22,16 +20,13 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-
 public class REST{
 	
 	private Model model;
 	
-	
 	public REST(Model store){
 		this.model = store;
 	}
-	
 	
 	public void listarProcuraEstabelecimento(){
 		
@@ -61,8 +56,6 @@ public class REST{
 	         }
 		});
 	}
-	
-
 	
 	public void addEstabelecimento(){
 		
