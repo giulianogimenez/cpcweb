@@ -72,8 +72,8 @@ public class REST{
 	        	estab.setNome(json.getString("nome"));
 	        	estab.setBandeira(convertToBandeira(json.getString("bandeira")));
 	        	estab.setEndereco(json.getString("endereco"));
-	        	estab.setLat(Float.parseFloat(json.getString("lat")));
-	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
+//	        	estab.setLat(Float.parseFloat(json.getString("lat")));
+//	        	estab.setLongi(Float.parseFloat(json.getString("longi")));
 	        	estab.setConveniencia(json.getBoolean("conveniencia"));
 	        	estab.setAlimentacao(json.getBoolean("alimentacao"));
 	        	estab.setTrocaOleo(json.getBoolean("trocaOleo"));  
