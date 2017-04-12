@@ -1,55 +1,40 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-	
-	<script>
-		// Create a map object and specify the DOM element for display.
-		var map;
-		
-		function initMap(){
-			map = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: -23.397, lng: -46.644},
-				scrollwheel: true,
-				zoom: 8
-			});
-			
-			map.addListener('rightclick',function(e){
-				clolocarMarker(e.latLng);
-			});
-		}
-
-		function marcarMapa(latLng) {
-			var marker = new google.maps.Marker({
-				position: latLng,
-				map: map
-			});
-			marker.setDraggable(true);
-			marker.addListener('rightclick',function(){ marker.setMap(null); });
-		}
-		
-		function clolocarMarker(latLng) {
-			var marker = new google.maps.Marker({
-				position: latLng,
-				map: map
-			});
-			marker.setDraggable(true);
-			marker.addListener('rightclick',function(){ marker.setMap(null); });
-		}
-
-    </script>
-    <script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6u-wNUM-dNnVM83Utro7ekIYjv_ETH7E&callback=initMap">
-    </script>
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+﻿<html>
 	<head>
-		<meta charset="utf-8">
-		<title>Mapa</title>
-	<link href="css/bootstrap.min.css" rel=stylesheet>
+		<title>Div flutuante centro da tela.</title>
 		<style type="text/css">
-			html, body { height: 100%; margin: 0; padding: 0; }
-			#map { height: 100%; }
+			body { 
+				background-color: #CCC; 
+				font-family: Tahoma,Arial; 
+			}
+			.div_teste{
+				width:200px;
+				height:100px;
+				background:#f00;
+				position:absolute;
+				z-index:100;
+				top:30%;
+				left:40;
+			}
 		</style>
+		<script>
+			function fechar() { 
+				obj = document.getElementById("posiciona");
+				obj.style.display = 'none';
+			}
+			function abrir() { 
+				obj = document.getElementById("posiciona");
+				obj.style.display = 'block';
+				obj.style.top = '0%';
+				obj.style.left = '50%';
+			}
+		</script>
 	</head>
-	<body onload="initMap();marcarMapa(-23.397,-46.644);">
-		<div id="map" onload='()'></div>
+<!--o elemento BODY por padrão tem posição relativa-->
+	<body onclick="abrir();">
+		<div class="div_teste" id="posiciona" align=center> 
+			<div id="fechar" align=right><a href="javascript:fechar();">FECHAR</a></div> 
+			<div id="fechar" align=left><a href="javascript:fechar();">FECHAR</a></div> 
+			Sou flutuante!
+		</div>
 	</body>
 </html>
