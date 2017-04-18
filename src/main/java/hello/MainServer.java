@@ -2,9 +2,6 @@ package hello;
 
 import static spark.Spark.*;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
 
@@ -14,7 +11,7 @@ public class MainServer {
 
     public static void main(String[] args) {
 
-    	model = model.getInstance();
+    	model = Model.getInstance();
     	REST controller = new REST(model); 
 		// Get port config of heroku on environment variable
         ProcessBuilder process = new ProcessBuilder();

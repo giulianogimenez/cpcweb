@@ -6,8 +6,8 @@ public class Estabelecimento implements Serializable {
 	private String nome;
 	private Bandeira bandeira;
 	private String endereco;
-	private float lat;
-	private float longi;
+	private double lat;
+	private double longi;
 	private boolean conveniencia;
 	private boolean alimentacao;
 	private boolean trocaOleo;
@@ -42,19 +42,19 @@ public class Estabelecimento implements Serializable {
 		this.endereco = endereco;
 	}
 	
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
 	
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 	
-	public float getLongi() {
+	public double getLongi() {
 		return longi;
 	}
 	
-	public void setLongi(float longi) {
+	public void setLongi(double longi) {
 		this.longi = longi;
 	}
 	
@@ -134,7 +134,7 @@ public class Estabelecimento implements Serializable {
 		
 	}
 	
-	public Estabelecimento(String nome, Bandeira bandeira, String endereco, float lat, float longi,
+	public Estabelecimento(String nome, Bandeira bandeira, String endereco, double lat, double longi,
 			boolean conveniencia, boolean alimentacao, boolean trocaOleo, boolean lavaRapido, boolean mecanico,
 			boolean borracheiro, boolean caixaEletronico, boolean semParar, boolean viaFacil) {
 		super();
