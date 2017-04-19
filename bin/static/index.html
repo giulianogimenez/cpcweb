@@ -12,7 +12,7 @@
 			var marker;
 			
 			$(document).ready(function(){
-				$('form').submit(function(e){    
+				$('form').submit(function(e){
 					e.preventDefault();
 					
 					var nome = $('#nome').val().trim();
@@ -53,6 +53,9 @@
 								alert("Erro");
 						},
 						"json");
+						
+					atualizaMap();
+					
 				});
 			});
 			
@@ -73,8 +76,29 @@
 						setEndereco(e.latLng);
 					}
 				});
+				atualizaMap();
 			}
-				
+			
+			function atualizaMap(){
+				setMapOnAll(null);
+				$.getJSON("/estabelecimento",function(e){
+					$.each(e,function(i,item){
+						var mark = new google.maps.Marker({
+							position: {lat: item.lat, lng: item.longi},
+							map: map,
+							animation: google.maps.Animation.DROP
+						});
+						mark.setDraggable(false);
+						if(item.bandeira === "SHELL")
+							mark.setIcon("img/shell_pin.png");
+						if(item.bandeira === "IPIRANGA")
+							mark.setIcon("img/ipiranga_pin.png");
+						if(item.bandeira === "BR")
+							mark.setIcon("img/br_pin.png");
+					});
+				});
+			}
+			
 			function iniciaMarker(latLng){
 				marker = new google.maps.Marker({
 					position: latLng,

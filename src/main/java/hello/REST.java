@@ -40,12 +40,8 @@ public class REST{
 	            	List<Estabelecimento> estabelecimentosList = model.listEstabelecimentos();
 	            	
 	            	if(!estabelecimentosList.isEmpty()){
-	            		
-	            		JSONArray jsonResult = new JSONArray();
-		         	    
-		             	jsonResult.put(new Gson().toJson(estabelecimentosList));
 		             	
-		             	return jsonResult;
+		             	return new Gson().toJson(estabelecimentosList);
 	            		
 	            	} 
 	             	
