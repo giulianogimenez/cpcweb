@@ -5,6 +5,7 @@ import static spark.Spark.*;
 import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
 
+@SuppressWarnings("unused")
 public class MainServer {
 
 	static Model model;

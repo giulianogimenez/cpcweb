@@ -3,10 +3,10 @@ package hello;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
-
-import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.List;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +40,7 @@ public class REST{
 	            	List<Estabelecimento> estabelecimentosList = model.listEstabelecimentos();
 	            	
 	            	if(!estabelecimentosList.isEmpty()){
-		             	
+	            		
 		             	return new Gson().toJson(estabelecimentosList);
 	            		
 	            	} 
@@ -61,7 +61,7 @@ public class REST{
 	        	
 	        	response.header("Access-Control-Allow-Origin", "*");
 	        	
-	        	JSONObject json = new JSONObject(request.body());
+	        	JSONObject json = new JSONObject(convertJSONString(request.body()));
 	        	
 	        	Estabelecimento estab = new Estabelecimento();
 	        	
@@ -1358,6 +1358,25 @@ public class REST{
 		if(bandeira.equals("IPIRANGA"))
 			return Bandeira.IPIRANGA;
 		return null;
+	}
+	
+	private String convertJSONString(String str){
+		
+		Charset utf8charset = Charset.forName("UTF-8");
+		Charset iso88591charset = Charset.forName("ISO-8859-1");
+	
+		ByteBuffer inputBuffer = ByteBuffer.wrap(str.getBytes());
+	
+		// decode UTF-8
+		CharBuffer data = utf8charset.decode(inputBuffer);
+	
+		// encode ISO-8559-1
+		ByteBuffer outputBuffer = iso88591charset.encode(data);
+		byte[] outputData = outputBuffer.array();
+		
+		str = new String(outputData);
+		
+		return str;
 	}
 	
 }

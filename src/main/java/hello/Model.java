@@ -18,7 +18,7 @@ public class Model{
 	ObjectContainer precos = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "bd/precos.db4o");
 	private static Model model;
 	
-	private Model(){
+	public Model(){
 		
 	}
 	

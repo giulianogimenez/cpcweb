@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
 		<title>Estabelecimentos</title>
 		<!-- Scripts -->
 		<script src="js/jquery-2.2.3.min.js"></script>
@@ -9,7 +9,8 @@
 		<script src = "js/index.js"></script>
 		<script>
 			var map;
-			var marker;
+			var markerRef;
+			var markers = [];
 			
 			$(document).ready(function(){
 				$('form').submit(function(e){
@@ -18,8 +19,8 @@
 					var nome = $('#nome').val().trim();
 					var bandeira = $('#bandeira').val().trim();
 					var endereco = $('#endereco').val().trim();
-					var lat = marker.getPosition().lat();
-					var lng = marker.getPosition().lng();
+					var lat = markerRef.getPosition().lat();
+					var lng = markerRef.getPosition().lng();
 					var conveniencia = ($('#conveniencia').is(':checked'));
 					var alimentacao = ($('#alimentacao').is(':checked'));
 					var trocaOleo = ($('#trocaOleo').is(':checked'));
@@ -47,15 +48,13 @@
 							'viaFacil': viaFacil 
 						}),
 						function(data){	
-							if(data[0].status == 1)
-								alert("Estabelecimento adicionado com sucesso.");
+							if(data[0].status == 1){
+								window.location.href = '/index.html';
+							}
 							else
 								alert("Erro");
 						},
 						"json");
-						
-					atualizaMap();
-					
 				});
 			});
 			
@@ -69,44 +68,73 @@
 					zoom: 15
 				});
 				map.addListener('rightclick',function(e){
-					if(marker == null)
+					if(markerRef == null)
 						iniciaMarker(e.latLng);
 					else{
-						marker.setPosition(e.latLng);
+						markerRef.setPosition(e.latLng);
 						setEndereco(e.latLng);
 					}
 				});
-				atualizaMap();
-			}
-			
-			function atualizaMap(){
-				setMapOnAll(null);
+				
 				$.getJSON("/estabelecimento",function(e){
 					$.each(e,function(i,item){
-						var mark = new google.maps.Marker({
+						
+						var infoWindow = new google.maps.InfoWindow({
+							content: content(item)
+						});
+						var marker = new google.maps.Marker({
 							position: {lat: item.lat, lng: item.longi},
 							map: map,
 							animation: google.maps.Animation.DROP
 						});
-						mark.setDraggable(false);
+						marker.addListener('click', function(){
+							infoWindow.open(map, marker);
+						});
+						marker.setDraggable(false);
+						
 						if(item.bandeira === "SHELL")
-							mark.setIcon("img/shell_pin.png");
+							marker.setIcon("img/shell_pin.png");
 						if(item.bandeira === "IPIRANGA")
-							mark.setIcon("img/ipiranga_pin.png");
+							marker.setIcon("img/ipiranga_pin.png");
 						if(item.bandeira === "BR")
-							mark.setIcon("img/br_pin.png");
+							marker.setIcon("img/br_pin.png");
+							
+						markers.push(marker);
 					});
 				});
 			}
 			
+			function content(item){
+				var str = "<h5>"+item.nome.toString()+"</h5><br>";
+				if(item.conveniencia)
+					str += "Conveniência<br>";
+				if(item.alimentacao)
+					str += "Alimentação<br>";
+				if(item.trocaOleo)
+					str += "Troca de óleo<br>";
+				if(item.lavaRapido)
+					str += "Lava rápido<br>";
+				if(item.mecanico)
+					str += "Mecânico<br>";
+				if(item.borracheiro)
+					str += "Borracheiro<br>";
+				if(item.caixaEletronico)
+					str += "Caixa eletrônico<br>";
+				if(item.semParar)
+					str += "Sem parar<br>";
+				if(item.viaFacil)
+					str += "Via fácil<br>";
+				return str;
+			}
+			
 			function iniciaMarker(latLng){
-				marker = new google.maps.Marker({
+				markerRef = new google.maps.Marker({
 					position: latLng,
 					map: map
 				});
-				marker.setDraggable(true);
+				markerRef.setDraggable(true);
 				setEndereco(latLng);
-				marker.addListener('dragend',function(e){
+				markerRef.addListener('dragend',function(e){
 					setEndereco(e.latLng);
 				});
 			}
