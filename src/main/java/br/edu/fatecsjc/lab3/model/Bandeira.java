@@ -5,6 +5,7 @@ public enum Bandeira {
 	IPIRANGA("Ipiranga"),
 	BR("Br");
 	
+	@SuppressWarnings("unused")
 	private String nome;
 	
 	private Bandeira(String nome) {
