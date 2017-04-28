@@ -1,13 +1,13 @@
 package br.edu.fatecsjc.lab3.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class Preco implements Serializable{
 	private Estabelecimento estabelecimento;
 	private TipoCombustivel tipoCombustivel;
 	private Float valor;
-	private Calendar dataAtualizacao;
+	private LocalDateTime dataAtualizacao;
 	
 	public Estabelecimento getEstabelecimento() {
 		return estabelecimento;
@@ -33,11 +33,11 @@ public class Preco implements Serializable{
 		this.valor = valor;
 	}
 	
-	public Calendar getDataAtualizacao() {
+	public LocalDateTime getDataAtualizacao() {
 		return dataAtualizacao;
 	}
 	
-	public void setDataAtualizacao(Calendar dataAtualizacao) {
+	public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
 		this.dataAtualizacao = dataAtualizacao;
 	}
 }

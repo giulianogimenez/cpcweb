@@ -6,6 +6,8 @@ import static spark.Spark.post;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,6 +18,8 @@ import com.google.gson.Gson;
 
 import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
+import br.edu.fatecsjc.lab3.model.Preco;
+import br.edu.fatecsjc.lab3.model.TipoCombustivel;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -38,11 +42,31 @@ public class REST{
 	        	
 	            try {
 	            	List<Estabelecimento> estabelecimentosList = model.listEstabelecimentos();
-	            	
 	            	if(!estabelecimentosList.isEmpty()){
-	            		
 		             	return new Gson().toJson(estabelecimentosList);
-	            		
+	            	} 
+	             	
+        		} catch (JSONException e) {	
+        			e.printStackTrace();
+        		}
+	            return new JSONArray();
+	         }
+		});
+	}
+	
+	public void listarPrecos(){
+		get("/precos/:estabelecimento", new Route() {
+			@Override
+            public Object handle(final Request request, final Response response){
+	        	
+	        	response.header("Access-Control-Allow-Origin", "*");
+	        	String estabelecimento = request.params(":estabelecimento");
+	        	Estabelecimento estabelecimento2 = new Estabelecimento();
+	        	estabelecimento2.setNome(estabelecimento);
+	        	try {
+	            	List<Preco> precosList = model.searchPreco(estabelecimento2);
+	            	if(!precosList.isEmpty()){
+		             	return new Gson().toJson(precosList);
 	            	} 
 	             	
         		} catch (JSONException e) {	
@@ -79,17 +103,35 @@ public class REST{
 	        	estab.setCaixaEletronico(json.getBoolean("caixaEletronico"));
 	        	estab.setSemParar(json.getBoolean("semParar"));
 	        	estab.setViaFacil(json.getBoolean("viaFacil"));
-	        	        	
-	            try {
-	            		if(model.addEstabelecimento(estab)){
-	            			JSONArray jsonResult = new JSONArray();
-	            			JSONObject jsonObj = new JSONObject();
-	            			
-	            			jsonObj.put("status", 1);
-		         	        jsonResult.put(jsonObj);
-		         	        
-		         	        return jsonResult;
-	                   	} 
+	        	
+	        	Preco gasolina = new Preco();
+	        	if(json.getDouble("precoGasolina") != 0f) {
+		        	gasolina.setDataAtualizacao(LocalDateTime.now());
+		        	gasolina.setEstabelecimento(estab);
+		        	gasolina.setTipoCombustivel(TipoCombustivel.GASOLINA);
+		        	gasolina.setValor(Float.valueOf(Double.valueOf(json.getDouble("precoGasolina")).toString()));
+	        	}
+	        	Preco etanol = new Preco();
+	        	if(json.getDouble("etanol") != 0f) {
+		        	etanol.setDataAtualizacao(LocalDateTime.now());
+		        	etanol.setEstabelecimento(estab);
+		        	etanol.setTipoCombustivel(TipoCombustivel.ETANOL);
+		        	etanol.setValor(Float.valueOf(Double.valueOf(json.getDouble("etanol")).toString()));
+	        	}
+	        	try {
+            		if(model.addEstabelecimento(estab)){
+            			if(gasolina.getEstabelecimento() != null)
+            				model.addPreco(gasolina);
+            			if(etanol.getEstabelecimento() != null)
+            				model.addPreco(etanol);
+            			JSONArray jsonResult = new JSONArray();
+            			JSONObject jsonObj = new JSONObject();
+            			
+            			jsonObj.put("status", 1);
+	         	        jsonResult.put(jsonObj);
+	         	        
+	         	        return jsonResult;
+                   	} 
         		}catch (JSONException e){
         			e.printStackTrace();
         		}

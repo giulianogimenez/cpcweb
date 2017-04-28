@@ -1,6 +1,7 @@
 package br.edu.fatecsjc.lab3.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Estabelecimento implements Serializable {
 	private String nome;
@@ -17,6 +18,7 @@ public class Estabelecimento implements Serializable {
 	private boolean caixaEletronico;
 	private boolean semParar;
 	private boolean viaFacil;
+	private List<Preco> precos;
 	
 	public String getNome() {
 		return nome;
@@ -153,7 +155,12 @@ public class Estabelecimento implements Serializable {
 		this.semParar = semParar;
 		this.viaFacil = viaFacil;
 	}
-	
-	
-	
+
+	public List<Preco> getPrecos() {
+		return precos;
+	}
+
+	public void setPrecos(List<Preco> precos) {
+		this.precos = precos;
+	}
 }

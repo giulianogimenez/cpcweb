@@ -31,6 +31,7 @@ public class MainServer {
 
 		controller.listarProcuraEstabelecimento();
 		controller.addEstabelecimento();
+		controller.listarPrecos();
 		
     }
 	

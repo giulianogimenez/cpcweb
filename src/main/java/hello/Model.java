@@ -59,6 +59,7 @@ public class Model{
 	    ObjectSet<Estabelecimento> allEstabelecimentos = query.execute();
 		List<Estabelecimento> estabelecimentosList = new ArrayList();
 		for (Estabelecimento estabelecimento : allEstabelecimentos) {
+			estabelecimento.setPrecos(searchPreco(estabelecimento));
 			estabelecimentosList.add(estabelecimento);
 		}
 		return estabelecimentosList;
@@ -93,7 +94,7 @@ public class Model{
 		Query query = precos.query();
 		query.constrain(Preco.class);
 	    ObjectSet<Preco> allPrecos = query.execute();
-	    List<Preco> precosList = new ArrayList<>();
+	    List<Preco> precosList = new ArrayList();
 	    for (Preco preco : allPrecos) {
 			if(preco.getEstabelecimento().getNome().equals(estabelecimento.getNome())) {
 				precosList.add(preco);

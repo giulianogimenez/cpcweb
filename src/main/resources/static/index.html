@@ -30,7 +30,8 @@
 					var caixaEletronico = ($('#caixaEletronico').is(':checked'));
 					var semParar = ($('#semParar').is(':checked'));
 					var viaFacil = ($('#viaFacil').is(':checked'));
-					
+					var precoGasolina = ($('#gasolinaComum').val());
+					var etanol = $('#etanol').val();
 					$.post("/estabelecimento", JSON.stringify({
 							'nome': nome,
 							'bandeira': bandeira,
@@ -45,7 +46,9 @@
 							'borracheiro': borracheiro,
 							'caixaEletronico': caixaEletronico,
 							'semParar': semParar,
-							'viaFacil': viaFacil 
+							'viaFacil': viaFacil,
+							'precoGasolina': precoGasolina,
+							'etanol': etanol
 						}),
 						function(data){	
 							if(data[0].status == 1){
@@ -98,14 +101,14 @@
 							marker.setIcon("img/ipiranga_pin.png");
 						if(item.bandeira === "BR")
 							marker.setIcon("img/br_pin.png");
-							
 						markers.push(marker);
 					});
 				});
 			}
 			
 			function content(item){
-				var str = "<h5>"+item.nome.toString()+"</h5><br>";
+				var str = "<div style=\"width: 300px; height:200px; padding:10px;\">";
+				str += "<h5>"+item.nome.toString()+"</h5><br>";
 				if(item.conveniencia)
 					str += "Conveniência<br>";
 				if(item.alimentacao)
@@ -124,6 +127,12 @@
 					str += "Sem parar<br>";
 				if(item.viaFacil)
 					str += "Via fácil<br>";
+				str += "<div style=\"margin-top:5px\">";
+				$.each(item.precos, function(i, item2){
+					str += "<strong>" + item2.tipoCombustivel + ": R$" + item2.valor + "<strong><br />";
+				});
+				str += "</div>";
+				str += "</div>";
 				return str;
 			}
 			
@@ -165,7 +174,7 @@
 			.flutuante{
 				background-color:#FFFFFF;
 				width:600px;
-				height:400px;
+				height:500px;
 				top: 50%;
 				left: 50%;
 				position:absolute;
@@ -220,29 +229,42 @@
 				</div>
 				<div class="form-group">
 					<label for="inputPassword3" class="col-md-4 control-label">Complementos</label>
-					
+					<br>
 					<table>
 						<tr>
-							<th><input type="checkbox" id="conveniencia"> Conveniência</input></th>
-							<th><input type="checkbox" id="alimentacao"> Alimentação</input></th>
+							<td><input type="checkbox" id="conveniencia"> Conveniência</input></td>
+							<td><input type="checkbox" id="alimentacao"> Alimentação</input></td>
 						</tr>
 						<tr>
-							<th><input type="checkbox" id="trocaOleo"> Troca de Óleo</input></th>
-							<th><input type="checkbox" id="lavaRapido"> Lava Rápido</input></th>
+							<td><input type="checkbox" id="trocaOleo"> Troca de Óleo</input></td>
+							<td><input type="checkbox" id="lavaRapido"> Lava Rápido</input></td>
 						</tr>
 						<tr>
-							<th><input type="checkbox" id="mecanico"> Mecânico</input></th>
-							<th><input type="checkbox" id="borracheiro"> Borracheiro</input></th>
+							<td><input type="checkbox" id="mecanico"> Mecânico</input></td>
+							<td><input type="checkbox" id="borracheiro"> Borracheiro</input></td>
 						</tr>
 						<tr>
-							<th><input type="checkbox" id="caixaEletronico"> Caixa Eletrônico</input></th>
-							<th><input type="checkbox" id="semParar"> Sem Parar</input></th>
+							<td><input type="checkbox" id="caixaEletronico"> Caixa Eletrônico</input></td>
+							<td><input type="checkbox" id="semParar"> Sem Parar</input></td>
 						</tr>
 						<tr>
-							<th><input type="checkbox" id="viaFacil"> Via Fácil</input></th>
+							<td><input type="checkbox" id="viaFacil"> Via Fácil</input></td>
 						</tr>
 					</table>
-					
+				</div>
+				<div class="form-group">
+					<div class="form-group">
+						<label class="col-md-4 control-label">Gasolina Comum</label>
+						<div class="col-md-6">
+							<input required="required" type="text" class="form-control" id="gasolinaComum">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">Etanol</label>
+						<div class="col-md-6">
+							<input type="text" class="form-control" id="etanol">
+						</div>
+					</div>
 				</div>
 				<button id="adicionar" type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Adicionar</button>
 			</form>
