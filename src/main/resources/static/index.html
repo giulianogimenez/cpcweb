@@ -1,55 +1,251 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-	
-	<script>
-		// Create a map object and specify the DOM element for display.
-		var map;
-		
-		function initMap(){
-			map = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: -23.397, lng: -46.644},
-				scrollwheel: true,
-				zoom: 8
+  <head>
+    <meta charset="UTF-8">
+		<title>Estabelecimentos</title>
+		<!-- Scripts -->
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6u-wNUM-dNnVM83Utro7ekIYjv_ETH7E&callback=initMap"></script>
+		<script src = "js/index.js"></script>
+		<script>
+			var map;
+			var markerRef;
+			var markers = [];
+			
+			$(document).ready(function(){
+				$('form').submit(function(e){
+					e.preventDefault();
+					
+					var nome = $('#nome').val().trim();
+					var bandeira = $('#bandeira').val().trim();
+					var endereco = $('#endereco').val().trim();
+					var lat = markerRef.getPosition().lat();
+					var lng = markerRef.getPosition().lng();
+					var conveniencia = ($('#conveniencia').is(':checked'));
+					var alimentacao = ($('#alimentacao').is(':checked'));
+					var trocaOleo = ($('#trocaOleo').is(':checked'));
+					var lavaRapido = ($('#lavaRapido').is(':checked'));
+					var mecanico = ($('#mecanico').is(':checked'));
+					var borracheiro = ($('#borracheiro').is(':checked'));
+					var caixaEletronico = ($('#caixaEletronico').is(':checked'));
+					var semParar = ($('#semParar').is(':checked'));
+					var viaFacil = ($('#viaFacil').is(':checked'));
+					
+					$.post("/estabelecimento", JSON.stringify({
+							'nome': nome,
+							'bandeira': bandeira,
+							'endereco': endereco,
+							'lat': lat,
+							'lng': lng,
+							'conveniencia': conveniencia,
+							'alimentacao': alimentacao,
+							'trocaOleo': trocaOleo,
+							'lavaRapido': lavaRapido,
+							'mecanico': mecanico,
+							'borracheiro': borracheiro,
+							'caixaEletronico': caixaEletronico,
+							'semParar': semParar,
+							'viaFacil': viaFacil 
+						}),
+						function(data){	
+							if(data[0].status == 1){
+								window.location.href = '/index.html';
+							}
+							else
+								alert("Erro");
+						},
+						"json");
+				});
 			});
 			
-			map.addListener('rightclick',function(e){
-				clolocarMarker(e.latLng);
-			});
-		}
+			function initMap(){
+				if(navigator.geolocation){
+					navigator.geolocation.getCurrentPosition(posicaoAtual);
+				}
+				map = new google.maps.Map(document.getElementById("map"), {
+					center: {lat: -23.397, lng: -46.644},
+					scrollwheel: true,
+					zoom: 15
+				});
+				map.addListener('rightclick',function(e){
+					if(markerRef == null)
+						iniciaMarker(e.latLng);
+					else{
+						markerRef.setPosition(e.latLng);
+						setEndereco(e.latLng);
+					}
+				});
+				
+				$.getJSON("/estabelecimento",function(e){
+					$.each(e,function(i,item){
+						
+						var infoWindow = new google.maps.InfoWindow({
+							content: content(item)
+						});
+						var marker = new google.maps.Marker({
+							position: {lat: item.lat, lng: item.longi},
+							map: map,
+							animation: google.maps.Animation.DROP
+						});
+						marker.addListener('click', function(){
+							infoWindow.open(map, marker);
+						});
+						marker.setDraggable(false);
+						
+						if(item.bandeira === "SHELL")
+							marker.setIcon("img/shell_pin.png");
+						if(item.bandeira === "IPIRANGA")
+							marker.setIcon("img/ipiranga_pin.png");
+						if(item.bandeira === "BR")
+							marker.setIcon("img/br_pin.png");
+							
+						markers.push(marker);
+					});
+				});
+			}
+			
+			function content(item){
+				var str = "<h5>"+item.nome.toString()+"</h5><br>";
+				if(item.conveniencia)
+					str += "Conveniência<br>";
+				if(item.alimentacao)
+					str += "Alimentação<br>";
+				if(item.trocaOleo)
+					str += "Troca de óleo<br>";
+				if(item.lavaRapido)
+					str += "Lava rápido<br>";
+				if(item.mecanico)
+					str += "Mecânico<br>";
+				if(item.borracheiro)
+					str += "Borracheiro<br>";
+				if(item.caixaEletronico)
+					str += "Caixa eletrônico<br>";
+				if(item.semParar)
+					str += "Sem parar<br>";
+				if(item.viaFacil)
+					str += "Via fácil<br>";
+				return str;
+			}
+			
+			function iniciaMarker(latLng){
+				markerRef = new google.maps.Marker({
+					position: latLng,
+					map: map
+				});
+				markerRef.setDraggable(true);
+				setEndereco(latLng);
+				markerRef.addListener('dragend',function(e){
+					setEndereco(e.latLng);
+				});
+			}
+			
+			function setEndereco(latLng){
+				var geocoder = new google.maps.Geocoder();
+				geocoder.geocode( {'location': latLng} , function(results,status){
+					if (status == google.maps.GeocoderStatus.OK){
+						$('#endereco').val(results[1].formatted_address);
+					}
+				});
+			}
+			
+			function posicaoAtual(position){
+				map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+			}
+			
+		</script>
 
-		function marcarMapa(latLng) {
-			var marker = new google.maps.Marker({
-				position: latLng,
-				map: map
-			});
-			marker.setDraggable(true);
-			marker.addListener('rightclick',function(){ marker.setMap(null); });
-		}
-		
-		function clolocarMarker(latLng) {
-			var marker = new google.maps.Marker({
-				position: latLng,
-				map: map
-			});
-			marker.setDraggable(true);
-			marker.addListener('rightclick',function(){ marker.setMap(null); });
-		}
-
-    </script>
-    <script async defer
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6u-wNUM-dNnVM83Utro7ekIYjv_ETH7E&callback=initMap">
-    </script>
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-	<head>
-		<meta charset="utf-8">
-		<title>Mapa</title>
-	<link href="css/bootstrap.min.css" rel=stylesheet>
+		<!-- Styles -->
+		<link href="css/bootstrap.min.css" rel=stylesheet>
 		<style type="text/css">
-			html, body { height: 100%; margin: 0; padding: 0; }
-			#map { height: 100%; }
+			html, body { 
+				height: 100%; 
+				margin: 0; 
+				padding: 0; 
+			}
+			.flutuante{
+				background-color:#FFFFFF;
+				width:600px;
+				height:400px;
+				top: 50%;
+				left: 50%;
+				position:absolute;
+				margin-top: -250px;
+				margin-left: -300px;
+				border-radius: 10px;
+				border-color: rgb(204, 204, 204);
+				border-style: solid;
+				border-width: 1px;
+			}
+			.map{
+				height: 100%;
+				width: 100%;
+			}
+			th{
+				padding: 3px;
+			}
 		</style>
 	</head>
-	<body onload="initMap();marcarMapa(-23.397,-46.644);">
-		<div id="map" onload='()'></div>
+	
+	<body>
+	
+		<button id="buttonMap" class="btn btn-primary col-md-offset-4 col-md-2" style="position:absolute;right:2%;top:2%;z-index: 2;" onclick="buttonMap('buttonMap','janela');">Adicionar</button>
+
+		<div id="map" class="map"></div>
+		
+		<div id="janela" class="flutuante" style="display: none;">
+		<br>
+		<br>
+			<form class="form-horizontal" method="post" id="form">
+				<div class="form-group">
+					<label class="col-md-4 control-label">Estabelecimento</label>
+					<div class="col-md-6">
+						<input required="required" type="text" class="form-control" id="nome">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-md-4 control-label">Endereço</label>
+					<div class="col-md-6">
+						<input type="text" class="form-control" id="endereco">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-md-4 control-label">Bandeira</label>
+					<div class="col-md-6">
+						<select class="form-control" id="bandeira">
+							<option value="shell">Shell</option>
+							<option value="br">BR</option>
+							<option value="ipiranga">Ipiranga</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword3" class="col-md-4 control-label">Complementos</label>
+					
+					<table>
+						<tr>
+							<th><input type="checkbox" id="conveniencia"> Conveniência</input></th>
+							<th><input type="checkbox" id="alimentacao"> Alimentação</input></th>
+						</tr>
+						<tr>
+							<th><input type="checkbox" id="trocaOleo"> Troca de Óleo</input></th>
+							<th><input type="checkbox" id="lavaRapido"> Lava Rápido</input></th>
+						</tr>
+						<tr>
+							<th><input type="checkbox" id="mecanico"> Mecânico</input></th>
+							<th><input type="checkbox" id="borracheiro"> Borracheiro</input></th>
+						</tr>
+						<tr>
+							<th><input type="checkbox" id="caixaEletronico"> Caixa Eletrônico</input></th>
+							<th><input type="checkbox" id="semParar"> Sem Parar</input></th>
+						</tr>
+						<tr>
+							<th><input type="checkbox" id="viaFacil"> Via Fácil</input></th>
+						</tr>
+					</table>
+					
+				</div>
+				<button id="adicionar" type="submit" class="btn btn-primary col-md-offset-4 col-md-4">Adicionar</button>
+			</form>
+		</div>
 	</body>
 </html>
