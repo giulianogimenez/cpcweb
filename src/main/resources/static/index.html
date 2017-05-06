@@ -129,14 +129,14 @@
 					str += "Via fácil<br>";
 				str += "<div style=\"margin-top:5px\">";
 				$.each(item.precos, function(i, item2){
-					str += "<strong>" + item2.tipoCombustivel + ": R$" + item2.valor + "</strong><br><br>";
+					str += "<strong>" + item2.tipoCombustivel + ": R$ " + item2.valor + "</strong><br><br>";
 				});
 				str += "</div>";
 				str += "<a style=\"margin-top:15px\" href=\"#\">Clique aqui para atualizar os preços dos combustíveis.</a>";
 				str += "</div>";
 				return str;
 			}
-			
+
 			function iniciaMarker(latLng){
 				markerRef = new google.maps.Marker({
 					position: latLng,

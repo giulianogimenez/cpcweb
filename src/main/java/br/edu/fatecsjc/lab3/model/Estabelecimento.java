@@ -9,17 +9,89 @@ public class Estabelecimento implements Serializable {
 	private String endereco;
 	private double lat;
 	private double longi;
-	private boolean conveniencia;
-	private boolean alimentacao;
-	private boolean trocaOleo;
-	private boolean lavaRapido;
-	private boolean mecanico;
-	private boolean borracheiro;
-	private boolean caixaEletronico;
-	private boolean semParar;
-	private boolean viaFacil;
+	private Boolean conveniencia;
+	private Boolean alimentacao;
+	private Boolean trocaOleo;
+	private Boolean lavaRapido;
+	private Boolean mecanico;
+	private Boolean borracheiro;
+	private Boolean caixaEletronico;
+	private Boolean semParar;
+	private Boolean viaFacil;
 	private List<Preco> precos;
 	
+	public Boolean getConveniencia() {
+		return conveniencia;
+	}
+
+	public void setConveniencia(Boolean conveniencia) {
+		this.conveniencia = conveniencia;
+	}
+
+	public Boolean getAlimentacao() {
+		return alimentacao;
+	}
+
+	public void setAlimentacao(Boolean alimentacao) {
+		this.alimentacao = alimentacao;
+	}
+
+	public Boolean getTrocaOleo() {
+		return trocaOleo;
+	}
+
+	public void setTrocaOleo(Boolean trocaOleo) {
+		this.trocaOleo = trocaOleo;
+	}
+
+	public Boolean getLavaRapido() {
+		return lavaRapido;
+	}
+
+	public void setLavaRapido(Boolean lavaRapido) {
+		this.lavaRapido = lavaRapido;
+	}
+
+	public Boolean getMecanico() {
+		return mecanico;
+	}
+
+	public void setMecanico(Boolean mecanico) {
+		this.mecanico = mecanico;
+	}
+
+	public Boolean getBorracheiro() {
+		return borracheiro;
+	}
+
+	public void setBorracheiro(Boolean borracheiro) {
+		this.borracheiro = borracheiro;
+	}
+
+	public Boolean getCaixaEletronico() {
+		return caixaEletronico;
+	}
+
+	public void setCaixaEletronico(Boolean caixaEletronico) {
+		this.caixaEletronico = caixaEletronico;
+	}
+
+	public Boolean getSemParar() {
+		return semParar;
+	}
+
+	public void setSemParar(Boolean semParar) {
+		this.semParar = semParar;
+	}
+
+	public Boolean getViaFacil() {
+		return viaFacil;
+	}
+
+	public void setViaFacil(Boolean viaFacil) {
+		this.viaFacil = viaFacil;
+	}
+
 	public String getNome() {
 		return nome;
 	}

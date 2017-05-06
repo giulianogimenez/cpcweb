@@ -59,7 +59,7 @@ public class Model{
 	    ObjectSet<Estabelecimento> allEstabelecimentos = query.execute();
 		List<Estabelecimento> estabelecimentosList = new ArrayList();
 		for (Estabelecimento estabelecimento : allEstabelecimentos) {
-			estabelecimento.setPrecos(searchPreco(estabelecimento));
+			estabelecimento.setPrecos(searchPreco(estabelecimento.getNome()));
 			estabelecimentosList.add(estabelecimento);
 		}
 		return estabelecimentosList;
@@ -79,27 +79,38 @@ public class Model{
 		}
 	}
 	
-	 boolean addPreco(Preco preco){
+	public boolean addPreco(Preco preco){
 		if(isEstabelecimentoAvailable(preco.getEstabelecimento().getNome())){
 			addEstabelecimento(preco.getEstabelecimento());
 		}
 		Query query = precos.query();
 		query.constrain(Preco.class);
+		ObjectSet<Preco> allPrecos = query.execute();
+		
+		for(Preco p:allPrecos){
+			if(p.getEstabelecimento().equals(preco.getEstabelecimento()) && p.getAtivo()){
+				p.setAtivo(false);
+				precos.store(p);
+				precos.commit();
+			}
+		}	
+		
 		precos.store(preco);
 		precos.commit();
 		return true;
 	}
 		
-	public List<Preco> searchPreco(Estabelecimento estabelecimento) {
+	public List<Preco> searchPreco(String estabelecimento) {
 		Query query = precos.query();
 		query.constrain(Preco.class);
 	    ObjectSet<Preco> allPrecos = query.execute();
 	    List<Preco> precosList = new ArrayList();
 	    for (Preco preco : allPrecos) {
-			if(preco.getEstabelecimento().getNome().equals(estabelecimento.getNome())) {
+			if(preco.getEstabelecimento().getNome().equals(estabelecimento) ) {
 				precosList.add(preco);
 			}
 		}
 	    return precosList;
-	}	
+	}
+	
 }

@@ -8,7 +8,16 @@ public class Preco implements Serializable{
 	private TipoCombustivel tipoCombustivel;
 	private Float valor;
 	private LocalDateTime dataAtualizacao;
+	private Boolean ativo;
 	
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
 	public Estabelecimento getEstabelecimento() {
 		return estabelecimento;
 	}

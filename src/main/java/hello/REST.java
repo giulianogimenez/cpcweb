@@ -22,9 +22,10 @@ import br.edu.fatecsjc.lab3.model.Preco;
 import br.edu.fatecsjc.lab3.model.TipoCombustivel;
 import spark.Request;
 import spark.Response;
+import spark.ResponseTransformer;
 import spark.Route;
 
-public class REST{
+public class REST implements ResponseTransformer{
 	
 	private Model model;
 	
@@ -33,7 +34,7 @@ public class REST{
 	}
 	
 	public void listarProcuraEstabelecimento(){
-		
+		System.out.println("listarProcuraEstabelecimento");
 		get("/estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
@@ -43,42 +44,73 @@ public class REST{
 	            try {
 	            	List<Estabelecimento> estabelecimentosList = model.listEstabelecimentos();
 	            	if(!estabelecimentosList.isEmpty()){
-		             	return new Gson().toJson(estabelecimentosList);
+	            		System.out.println("listarProcuraEstabelecimento END");
+//		             	return new Gson().toJson(estabelecimentosList);
+	            		JSONArray jsonArray= new JSONArray();
+	            		for(Estabelecimento estab: estabelecimentosList){
+	            			JSONObject jsonResult = new JSONObject();
+	            			jsonResult.put("nome",estab.getNome());
+	            			jsonResult.put("bandeira",estab.getBandeira());
+	            			jsonResult.put("endereco",estab.getEndereco());
+	            			jsonResult.put("lat",estab.getLat());
+	            			jsonResult.put("longi",estab.getLongi());
+	            			jsonResult.put("conveniencia",estab.getConveniencia());
+	            			jsonResult.put("alimentacao",estab.getAlimentacao());
+	            			jsonResult.put("trocaOleo",estab.getTrocaOleo());
+	            			jsonResult.put("lavaRapido",estab.getLavaRapido());
+	            			jsonResult.put("mecanico",estab.getMecanico());
+	            			jsonResult.put("borracheiro",estab.getBorracheiro());
+	            			jsonResult.put("caixaEletronico",estab.getCaixaEletronico());
+	            			jsonResult.put("semParar",estab.getSemParar());
+	            			jsonResult.put("viaFacil",estab.getViaFacil());
+	            			jsonArray.put(jsonResult);
+	            		}
+	            		return jsonArray;
 	            	} 
 	             	
         		} catch (JSONException e) {	
         			e.printStackTrace();
         		}
+	            System.out.println("listarProcuraEstabelecimento END");
 	            return new JSONArray();
 	         }
 		});
 	}
 	
 	public void listarPrecos(){
+		System.out.println("listarPrecos");
 		get("/precos/:estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
 	        	
 	        	response.header("Access-Control-Allow-Origin", "*");
-	        	String estabelecimento = request.params(":estabelecimento");
-	        	Estabelecimento estabelecimento2 = new Estabelecimento();
-	        	estabelecimento2.setNome(estabelecimento);
+	        	
 	        	try {
-	            	List<Preco> precosList = model.searchPreco(estabelecimento2);
+	            	List<Preco> precosList = model.searchPreco(request.params(":estabelecimento"));
+	            	
 	            	if(!precosList.isEmpty()){
-		             	return new Gson().toJson(precosList);
+	            		JSONArray jsonArray = new JSONArray();
+	            		for(Preco p: precosList){
+	            			JSONObject jsonResult = new JSONObject();
+	            			jsonResult.put("valor",p.getValor());
+	            			jsonResult.put("tipoCombustivel", p.getTipoCombustivel());
+	            			jsonArray.put(jsonResult);
+	            		}
+	            		System.out.println("listarPrecos END");
+	            		return jsonArray;
 	            	} 
 	             	
         		} catch (JSONException e) {	
         			e.printStackTrace();
         		}
+	        	System.out.println("listarPrecos END");
 	            return new JSONArray();
 	         }
 		});
 	}
 	
 	public void addEstabelecimento(){
-		
+		System.out.println("addEstabelecimento");
 		post("/estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
@@ -86,6 +118,8 @@ public class REST{
 	        	response.header("Access-Control-Allow-Origin", "*");
 	        	
 	        	JSONObject json = new JSONObject(convertJSONString(request.body()));
+	        	JSONArray jsonResult = new JSONArray();
+    			JSONObject jsonObj = new JSONObject();
 	        	
 	        	Estabelecimento estab = new Estabelecimento();
 	        	
@@ -109,6 +143,7 @@ public class REST{
 		        	gasolina.setDataAtualizacao(LocalDateTime.now());
 		        	gasolina.setEstabelecimento(estab);
 		        	gasolina.setTipoCombustivel(TipoCombustivel.GASOLINA);
+		        	gasolina.setAtivo(true);
 		        	gasolina.setValor(Float.valueOf(Double.valueOf(json.getDouble("precoGasolina")).toString()));
 	        	}
 	        	Preco etanol = new Preco();
@@ -116,6 +151,7 @@ public class REST{
 		        	etanol.setDataAtualizacao(LocalDateTime.now());
 		        	etanol.setEstabelecimento(estab);
 		        	etanol.setTipoCombustivel(TipoCombustivel.ETANOL);
+		        	etanol.setAtivo(true);
 		        	etanol.setValor(Float.valueOf(Double.valueOf(json.getDouble("etanol")).toString()));
 	        	}
 	        	try {
@@ -124,27 +160,60 @@ public class REST{
             				model.addPreco(gasolina);
             			if(etanol.getEstabelecimento() != null)
             				model.addPreco(etanol);
-            			JSONArray jsonResult = new JSONArray();
-            			JSONObject jsonObj = new JSONObject();
-            			
+
             			jsonObj.put("status", 1);
 	         	        jsonResult.put(jsonObj);
 	         	        
+	         	       System.out.println("addEstabelecimento END");
 	         	        return jsonResult;
                    	} 
         		}catch (JSONException e){
         			e.printStackTrace();
         		}
-	            
-    			JSONArray jsonResult = new JSONArray();
-    			JSONObject jsonObj = new JSONObject();
     			
     			jsonObj.put("status", 0);
      	        jsonResult.put(jsonObj);
-     	        
+     	       System.out.println("addEstabelecimento END");
+     	       
      	        return jsonResult;
 	         }
 		});
+	}
+	
+	private Bandeira convertToBandeira(String bandeira){
+		bandeira = bandeira.toUpperCase();
+		if(bandeira.equals("BR"))
+			return Bandeira.BR;
+		if(bandeira.equals("SHELL"))
+			return Bandeira.SHELL;
+		if(bandeira.equals("IPIRANGA"))
+			return Bandeira.IPIRANGA;
+		return null;
+	}
+	
+	private String convertJSONString(String str){
+		
+		Charset utf8charset = Charset.forName("UTF-8");
+		Charset iso88591charset = Charset.forName("ISO-8859-1");
+	
+		ByteBuffer inputBuffer = ByteBuffer.wrap(str.getBytes());
+	
+		// decode UTF-8
+		CharBuffer data = utf8charset.decode(inputBuffer);
+	
+		// encode ISO-8559-1
+		ByteBuffer outputBuffer = iso88591charset.encode(data);
+		byte[] outputData = outputBuffer.array();
+		
+		str = new String(outputData);
+		
+		return str;
+	}
+
+	@Override
+	public String render(Object model) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 //	
 //	public void loginPsychologist(){
@@ -1391,34 +1460,6 @@ public class REST{
 //			});     
 //		}
 		
-	private Bandeira convertToBandeira(String bandeira){
-		bandeira = bandeira.toUpperCase();
-		if(bandeira.equals("BR"))
-			return Bandeira.BR;
-		if(bandeira.equals("SHELL"))
-			return Bandeira.SHELL;
-		if(bandeira.equals("IPIRANGA"))
-			return Bandeira.IPIRANGA;
-		return null;
-	}
-	
-	private String convertJSONString(String str){
-		
-		Charset utf8charset = Charset.forName("UTF-8");
-		Charset iso88591charset = Charset.forName("ISO-8859-1");
-	
-		ByteBuffer inputBuffer = ByteBuffer.wrap(str.getBytes());
-	
-		// decode UTF-8
-		CharBuffer data = utf8charset.decode(inputBuffer);
-	
-		// encode ISO-8559-1
-		ByteBuffer outputBuffer = iso88591charset.encode(data);
-		byte[] outputData = outputBuffer.array();
-		
-		str = new String(outputData);
-		
-		return str;
-	}
+
 	
 }

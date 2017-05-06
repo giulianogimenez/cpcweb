@@ -30,7 +30,5 @@ public class Teste {
 			
 			System.out.println(str);
 		}
-
 	}
-
 }
