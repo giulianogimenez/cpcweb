@@ -5,7 +5,9 @@ public enum TipoCombustivel {
 	GASOLINA("Gasolina comum"),
 	GASOLINA_ADITIVADA("Gasolina Aditivada");
 	
-	private String nome;
+	@SuppressWarnings("unused")
+	private String nome; 
+	
 	private TipoCombustivel(String nome) {
 		this.nome = nome;
 	}

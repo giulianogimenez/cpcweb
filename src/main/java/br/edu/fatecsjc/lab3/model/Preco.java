@@ -3,6 +3,7 @@ package br.edu.fatecsjc.lab3.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings("serial")
 public class Preco implements Serializable{
 	private Estabelecimento estabelecimento;
 	private TipoCombustivel tipoCombustivel;

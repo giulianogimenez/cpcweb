@@ -3,6 +3,7 @@ package br.edu.fatecsjc.lab3.model;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class Estabelecimento implements Serializable {
 	private String nome;
 	private Bandeira bandeira;

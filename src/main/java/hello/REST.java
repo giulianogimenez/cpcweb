@@ -7,14 +7,11 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import br.edu.fatecsjc.lab3.model.Bandeira;
 import br.edu.fatecsjc.lab3.model.Estabelecimento;
@@ -89,21 +86,19 @@ public class REST implements ResponseTransformer{
 	            	List<Preco> precosList = model.searchPreco(request.params(":estabelecimento"));
 	            	
 	            	if(!precosList.isEmpty()){
-	            		JSONArray jsonArray = new JSONArray();
+	            		JSONArray jsonResult = new JSONArray();
 	            		for(Preco p: precosList){
-	            			JSONObject jsonResult = new JSONObject();
-	            			jsonResult.put("valor",p.getValor());
-	            			jsonResult.put("tipoCombustivel", p.getTipoCombustivel());
-	            			jsonArray.put(jsonResult);
+	            			JSONObject jsonObject = new JSONObject();
+	            			jsonObject.put("valor",p.getValor());
+	            			jsonObject.put("tipoCombustivel", p.getTipoCombustivel());
+	            			jsonResult.put(jsonObject);
 	            		}
-	            		System.out.println("listarPrecos END");
-	            		return jsonArray;
+	            		return jsonResult;
 	            	} 
 	             	
         		} catch (JSONException e) {	
         			e.printStackTrace();
         		}
-	        	System.out.println("listarPrecos END");
 	            return new JSONArray();
 	         }
 		});
@@ -127,7 +122,7 @@ public class REST implements ResponseTransformer{
 	        	estab.setBandeira(convertToBandeira(json.getString("bandeira")));
 	        	estab.setEndereco(json.getString("endereco"));
 	        	estab.setLat(json.getDouble("lat"));
-	        	estab.setLongi(json.getDouble("lng"));
+	        	estab.setLongi(json.getDouble("longi"));
 	        	estab.setConveniencia(json.getBoolean("conveniencia"));
 	        	estab.setAlimentacao(json.getBoolean("alimentacao"));
 	        	estab.setTrocaOleo(json.getBoolean("trocaOleo"));  
@@ -164,7 +159,6 @@ public class REST implements ResponseTransformer{
             			jsonObj.put("status", 1);
 	         	        jsonResult.put(jsonObj);
 	         	        
-	         	       System.out.println("addEstabelecimento END");
 	         	        return jsonResult;
                    	} 
         		}catch (JSONException e){
@@ -173,7 +167,6 @@ public class REST implements ResponseTransformer{
     			
     			jsonObj.put("status", 0);
      	        jsonResult.put(jsonObj);
-     	       System.out.println("addEstabelecimento END");
      	       
      	        return jsonResult;
 	         }
@@ -224,17 +217,12 @@ public class REST implements ResponseTransformer{
 //	        	
 //	           response.header("Access-Control-Allow-Origin", "*");
 //
-//	        	
-//	        	
-//	        	
 //	           JSONObject json = new JSONObject(request.body());
 //	        	
 //	           String userName = json.getString("userName");
 //	           
 //	           String password = json.getString("password");
-//	           	
-//	           
-//         	    
+//	           	         	    
 //	           try {
 //	        	   Psychologist psychologist = model.loginPsychologist(userName, password);
 //	            	
@@ -256,9 +244,7 @@ public class REST implements ResponseTransformer{
 //	            		
 //	            		
 //	            	}
-//	            	
-//	            	
-//	             	
+//
 //	        		} catch (JSONException e) {
 //	        				
 //	        			//e.printStackTrace();
@@ -276,12 +262,9 @@ public class REST implements ResponseTransformer{
 //            	
 //            	return jsonResult;
 //         	   
-//         	   
-//	        	
 //		   }
 //		});     
-//
-//         
+//       
 //	}
 //	
 //	

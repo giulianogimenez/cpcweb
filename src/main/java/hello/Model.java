@@ -1,7 +1,6 @@
 package hello;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.db4o.Db4oEmbedded;
@@ -57,7 +56,7 @@ public class Model{
 		Query query = estabelecimentos.query();
 		query.constrain(Estabelecimento.class);
 	    ObjectSet<Estabelecimento> allEstabelecimentos = query.execute();
-		List<Estabelecimento> estabelecimentosList = new ArrayList();
+		List<Estabelecimento> estabelecimentosList = new ArrayList<Estabelecimento>();
 		for (Estabelecimento estabelecimento : allEstabelecimentos) {
 			estabelecimento.setPrecos(searchPreco(estabelecimento.getNome()));
 			estabelecimentosList.add(estabelecimento);
@@ -104,9 +103,9 @@ public class Model{
 		Query query = precos.query();
 		query.constrain(Preco.class);
 	    ObjectSet<Preco> allPrecos = query.execute();
-	    List<Preco> precosList = new ArrayList();
+	    List<Preco> precosList = new ArrayList<Preco>();
 	    for (Preco preco : allPrecos) {
-			if(preco.getEstabelecimento().getNome().equals(estabelecimento) ) {
+			if(preco.getEstabelecimento().getNome().equals(estabelecimento) && preco.getAtivo() ) {
 				precosList.add(preco);
 			}
 		}
