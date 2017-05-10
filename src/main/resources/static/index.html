@@ -108,7 +108,7 @@
 			
 			function content(item){
 				var str = "<div style=\"width: 300px; height:200px; padding:10px;\">";
-				str += "<h5>"+item.nome.toString()+"</h5><br>";
+				str += "<h5>"+item.nome+"</h5><br>";
 				if(item.conveniencia)
 					str += "Conveniência<br>";
 				if(item.alimentacao)
@@ -128,10 +128,12 @@
 				if(item.viaFacil)
 					str += "Via fácil<br>";
 				str += "<div style=\"margin-top:5px\">";
-				$.each(item.precos, function(i, item2){
-					str += "<strong>" + item2.tipoCombustivel + ": R$ " + item2.valor + "</strong><br><br>";
+				
+				$.each(item.precos,function(i2, item2){
+					str += "<strong>" + item2 + "</strong><br>";
 				});
-				str += "</div>";
+				
+				str += "<br></div>";
 				str += "<a style=\"margin-top:15px\" href=\"#\">Clique aqui para atualizar os preços dos combustíveis.</a>";
 				str += "</div>";
 				return str;

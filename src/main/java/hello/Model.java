@@ -87,7 +87,7 @@ public class Model{
 		ObjectSet<Preco> allPrecos = query.execute();
 		
 		for(Preco p:allPrecos){
-			if(p.getEstabelecimento().equals(preco.getEstabelecimento()) && p.getAtivo()){
+			if(p.getEstabelecimento().equals(preco.getEstabelecimento()) && p.getAtivo() && p.getTipoCombustivel().equals(preco.getTipoCombustivel())){
 				p.setAtivo(false);
 				precos.store(p);
 				precos.commit();
@@ -105,6 +105,7 @@ public class Model{
 	    ObjectSet<Preco> allPrecos = query.execute();
 	    List<Preco> precosList = new ArrayList<Preco>();
 	    for (Preco preco : allPrecos) {
+	    	
 			if(preco.getEstabelecimento().getNome().equals(estabelecimento) && preco.getAtivo() ) {
 				precosList.add(preco);
 			}

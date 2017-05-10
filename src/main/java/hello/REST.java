@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -31,7 +32,6 @@ public class REST implements ResponseTransformer{
 	}
 	
 	public void listarProcuraEstabelecimento(){
-		System.out.println("listarProcuraEstabelecimento");
 		get("/estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
@@ -41,8 +41,6 @@ public class REST implements ResponseTransformer{
 	            try {
 	            	List<Estabelecimento> estabelecimentosList = model.listEstabelecimentos();
 	            	if(!estabelecimentosList.isEmpty()){
-	            		System.out.println("listarProcuraEstabelecimento END");
-//		             	return new Gson().toJson(estabelecimentosList);
 	            		JSONArray jsonArray= new JSONArray();
 	            		for(Estabelecimento estab: estabelecimentosList){
 	            			JSONObject jsonResult = new JSONObject();
@@ -60,6 +58,7 @@ public class REST implements ResponseTransformer{
 	            			jsonResult.put("caixaEletronico",estab.getCaixaEletronico());
 	            			jsonResult.put("semParar",estab.getSemParar());
 	            			jsonResult.put("viaFacil",estab.getViaFacil());
+	            			jsonResult.put("precos", REST.this.toString(estab.getPrecos()));
 	            			jsonArray.put(jsonResult);
 	            		}
 	            		return jsonArray;
@@ -68,14 +67,12 @@ public class REST implements ResponseTransformer{
         		} catch (JSONException e) {	
         			e.printStackTrace();
         		}
-	            System.out.println("listarProcuraEstabelecimento END");
 	            return new JSONArray();
 	         }
 		});
 	}
 	
 	public void listarPrecos(){
-		System.out.println("listarPrecos");
 		get("/precos/:estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
@@ -84,13 +81,12 @@ public class REST implements ResponseTransformer{
 	        	
 	        	try {
 	            	List<Preco> precosList = model.searchPreco(request.params(":estabelecimento"));
-	            	
 	            	if(!precosList.isEmpty()){
 	            		JSONArray jsonResult = new JSONArray();
 	            		for(Preco p: precosList){
 	            			JSONObject jsonObject = new JSONObject();
 	            			jsonObject.put("valor",p.getValor());
-	            			jsonObject.put("tipoCombustivel", p.getTipoCombustivel());
+	            			jsonObject.put("tipoCombustivel", p.getTipoCombustivel().toString());
 	            			jsonResult.put(jsonObject);
 	            		}
 	            		return jsonResult;
@@ -105,7 +101,6 @@ public class REST implements ResponseTransformer{
 	}
 	
 	public void addEstabelecimento(){
-		System.out.println("addEstabelecimento");
 		post("/estabelecimento", new Route() {
 			@Override
             public Object handle(final Request request, final Response response){
@@ -201,6 +196,14 @@ public class REST implements ResponseTransformer{
 		str = new String(outputData);
 		
 		return str;
+	}
+	
+	private List<String> toString(List<Preco> listPreco){
+		List<String> ret = new ArrayList<String>();
+		for(Preco preco: listPreco){
+			ret.add(preco.getTipoCombustivel().toString() + ":  R$ " + String.format("%.3f",preco.getValor()));
+		}
+		return ret;
 	}
 
 	@Override
